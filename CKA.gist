@@ -1,0 +1,104 @@
+Day 1 -------------------------------------------------------------------
+kubectl create -f example1.yaml
+ kubectl get pods
+ kubectl get po
+ kubectl get po -o wide
+ kubectl describ pod tomcat-pod
+ kubectl describe pod tomcat-pod
+
+12  kubectl create -f example1.yaml
+   13  kubectl get po 
+   14  kubectl get po -o wide 
+   15  ping 192.168.1.4
+   16  kubectl exec -it tomcat-pod -- /bin/sh
+   17  kubectl delete pod tomcat-pod 
+   18  kubectl get po 
+   19  history
+   
+ 
+   
+    4  cat > example2.yaml
+    5  kubectl create -f example2.yaml
+    6  kubectl get po 
+    7  kubectl get po -o wide
+    8  kubectl get po -l app=tomcat-app
+    9  kubectl describe rc tomcat-rc 
+   10  kubectl scale rc tomcat-rc --replicas=7
+   11  kubectl get po -o wide
+   12  kubectl scale rc tomcat-rc --replicas=2
+   13  kubectl get po -o wide
+   14  kubectl scale rc tomcat-rc --replicas=4
+   15  kubectl get po -o wide
+   16  kubectl delete pod tomcat-rc-5bhp7 
+   17  kubectl get po -o wide
+   18  kubectl delete rc tomcat-rc 
+   19  kubectl get po -l app=tomcat-app
+   20  kubectl create -f example2.yaml
+   21  kubectl get po -l app=tomcat-app
+   22  kubetl delete -f example2.yaml
+   23  kubectl delete -f example2.yaml
+
+
+
+26  kubectl get po
+   27  kubectl run tomcat-pod1 --image=vishymails/tomcatimage:1.0 --labels=app=tomcat-app --dry-run=client
+   28  kubectl run tomcat-pod1 --image=vishymails/tomcatimage:1.0 --labels=app=tomcat-app --dry-run=client -o yaml
+   29  kubectl get po
+   30  kubectl run tomcat-pod1 --image=vishymails/tomcatimage:1.0 --labels=app=tomcat-app
+   31  kubectl get po
+   32  kubectl run tomcat-pod2 --image=vishymails/tomcatimage:1.0 --labels=app=tomcat-app
+   33  kubectl run tomcat-pod3 --image=vishymails/tomcatimage:1.0 --labels=app=tomcat-app
+   34  kubectl get po
+   35  kubectl get po -o wide -l app=tomcat-app
+   36  kubectl get rc 
+   37  ls
+   38  kubectl create -f example2.yaml
+   39  kubectl get po 
+   40  kubectl get rc 
+   41  kubectl delete pod tomcat-pod1
+   42  kubectl get rc 
+   43  kubectl get po 
+   44  kubectl describe rc tomcat-rc 
+
+12 kubectl create -f example3.yaml
+  13 kubectl get rs
+  14 kubectl get po
+  15 kubectl get po -o wide
+  16 kubectl describe rs tomcat-rs
+  17 kubectl scale rs tomcat-rs --replicas=6
+  18 kubectl get po -o wide
+  19 kubectl scale rs tomcat-rs --replicas=2
+  20 kubectl get po -o wide
+  21 kubectl get po -o wide
+  22 kubectl delete rs tomcat-rs
+  23 kubectl delete rs tomcat-pod
+  24 kubectl delete pod tomcat-pod
+
+
+   4  cat > example4.yaml
+    5  kubectl create -f example4.yaml 
+    6  kubectl get deploy 
+    7  kubectl get deploy -l app=tomcat-app
+    8  kubectl get po 
+    9  kubectl get po -o wide 
+   10  kubectl get rs 
+   11  kubectl describe deploy tomcat-deploy 
+
+Terminal1 ------------------
+ 14  kubectl get deploy -o wide 
+   15  kubectl set image deploy tomcat-deploy tomcat-container=nginx:1.9.1
+   16  kubectl set image deploy tomcat-deploy tomcat-containers=nginx:1.9.1
+   17  kubectl rollout status deployment/tomcat-deploy 
+   18  kubectl get deploy -o wide 
+   19  kubectl set image deploy tomcat-deploy tomcat-containers=nginx:1.91 --record
+   20  kubectl get deploy -o wide 
+   21  kubectl rollout status deployment/tomcat-deploy 
+   22  kubectl get deploy -o wide 
+   23  kubectl rollout status deployment/tomcat-deploy 
+   24  kubectl scale deployment tomcat-deploy --replicas=7
+   25  kubectl get deploy -o wide 
+   26  kubectl scale deployment tomcat-deploy --replicas=3
+   27  kubectl get deploy -o wide 
+Terminal 2----------------------------------------
+3  kubectl rollout history deployment/tomcat-deploy
+    4  kubectl rollout undo deployment/tomcat-deploy
