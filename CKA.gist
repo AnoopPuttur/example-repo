@@ -102,3 +102,140 @@ Terminal1 ------------------
 Terminal 2----------------------------------------
 3  kubectl rollout history deployment/tomcat-deploy
     4  kubectl rollout undo deployment/tomcat-deploy
+
+
+Day2 ----------------------------------
+    
+    
+    Create Alias for kubectl  command:
+ alias g=kubectl
+Q 01) #Create a new pod called admin-pod with image busybox. Allow it to be able to set system_time. Container should sleep for 3200 seconds.
+
+
+ 4  alias g=kubectl 
+    5  g run admin-pod --image=busybox --command sleep 3200 --dry-run=client -o yaml 
+  
+
+Create a new deployment called web-proj-268 with image nginx:1.16 and one replica. Next, upgrade the deployment to version 1.17 using rolling update. 
+Make sure that the version upgrade is recorded in the resource annotation.
+
+
+alias g=kubectl
+  6  g create deployment web-proj-268 --image=nginx:1.16
+    7  g describe deployment web-proj-268
+    8  g get deploy
+    9  g get po 
+   10  g get rs
+   11  g set image deployment web-proj-268 nginx=nginx:1.7 --record 
+   12  g rollout history deployment web-proj-268
+
+
+
+Create a new deployment web-003, scale this deployment to 3 replicas, make sure desired number of pods are always running.
+
+  14  g create deployment web-003 --image=nginx --replicas=3
+   15  g get po 
+
+
+ deploy a web-load-5461 pod using nginx:1.17 with the label set to tier=web
+ 
+ kubectl run tomcat-pod1 --image=nginx:1.17 --labels=tier=web --dry-run=
+ 
+ 
+ 
+ 
+ Create a new deployment called nginx-deployment with an image nginx:1.16 and 5 replicas. There are 2 worker nodes in our cluster. 
+#Please make sure no pod will get deployed on node7.
+ 
+ 
+ 
+ 
+ Create static pod on node07 called static-nginx with image nginx and you have to make sure that it is recreated/restarted automatically in case of any failure happens.
+
+5  ps -ef | grep kubelet
+    6  sudo grep static /var/lib/kubelet/config.yaml
+    7  ls /etc/kubernetes/manifests
+    8  alias g=kubectl
+    9  g run static-nginx --image=nginx --dry-run=client -o yaml 
+   10  g run static-nginx --image=nginx --dry-run=client -o yaml > example9.yaml
+   11  g get nodes 
+   12  cat example9.yaml | ssh node01 "tee example9.yaml"
+   13  clead
+   14  clear
+   15  g get po 
+   16  g get po -o wide 
+   17  g delete pod static-nginx-node01
+   18  g get po -o wide 
+   19  history
+   
+   
+   
+   WORKER NODE
+   
+   4  ps -ef | grep kubelet
+    5  sudo grep static /var/lib/kubelet/config.yaml
+    6  sudo cp example9.yaml /etc/kubernetes/config.yaml
+    7  sudo cp example9.yaml /etc/kubernetes/manifests/.
+    8  ls /etc/kubernetes/manifests
+
+
+services -
+     4  cat > example9.yaml
+    5  cat > example10.yaml
+    6  kubectl create -f example9.yaml
+    7  kubectl create -f example10.yaml
+    8  kubectl get po 
+    9  kubectl get svc 
+   10  kubectl describe svc my-service
+   11  curl http://192.168.1.4:8080
+   12  curl http://192.168.1.5:8080
+   13  curl http://192.168.1.6:8080
+   14  kubectl describe svc my-service
+   15  kubectl get po -o wide
+   16  kubectl get node -o wide
+   17  curl http://172.30.2.2:8080
+   18  curl http://172.30.2.2:31000
+   19  history
+
+
+   Expose "audit-web-app" pod to by creating a service "audit-web-app-service" on port 30002 on nodes of given cluster.
+
+
+ alias g=kubectl
+    5  g run audit-web-app --image=nginx --port=8080
+    6  g expose pod audit-web-app --name=audit-web-app-svc --type=NodePort --dry-run=client -o yaml | tee example12.yaml
+    7  kubectl get po 
+    8  g apply -f example12.yaml
+    9  g get pods -o wide 
+   10  g describe audit-web-app-svc
+   11  g get svc
+   12  g describe svc audit-web-app-svc
+   
+   
+   
+   
+   Create a replicaset (name : web-replica, image=nginx, replicas=3), there is already a pod running in our cluster.  
+ Please make sure that total count of pods running in the cluster is not more than 3.
+  
+  
+  
+  
+  Volumes - 
+  
+   cat > example13.yaml
+   15  kubectl create -f example13.yaml
+   16  kubectl exec -it tomcat-pod -- /bin/sh
+   17  kubectl get po 
+   18  kubectl delete po tomcat-pod
+   19  kubectl get po 
+   20  kubectl create -f example13.yaml
+   21  kubectl exec -it tomcat-pod -- /bin/sh
+
+MultiContainer
+9  cat > example16.yaml
+   10  kubectl create -f example16.yaml
+   11  kubectl get po -o wide
+   12  kubectl exec -it multicontainer-pod -- /bin/sh
+   13  kubectl exec --container=producer -it multicontainer-pod -- /bin/sh
+   14  history
+   
