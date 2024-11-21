@@ -238,4 +238,99 @@ MultiContainer
    12  kubectl exec -it multicontainer-pod -- /bin/sh
    13  kubectl exec --container=producer -it multicontainer-pod -- /bin/sh
    14  history
+
+PV/PVC
+7  clear
+    8  kubectl create -f example19.yaml
+    9  kubectl get pv 
+   10  kubectl create -f example20.yaml
+   11  kubectl get pvc
+   12  kubectl get pv 
+   13  history
+
+
+19  kubectl delete pvc kube-pv
+   20  kubectl delete pv kube-pv
+   21  kubectl create -f example19.yaml
+   22  cat > example21.yaml
+   23  kubectl create -f example21.yaml
+   24  kubectl get pv 
+   25  kubectl get pvc
+   26  kubectl delete pvc my-disk-claim
+   27  kubectl create -f example20.yaml
+   28  kubectl get pv 
+   29  kubectl get pvc
+   30  cat > example22.yaml
+   31  kubectl create -f example22.yaml
+   32  kubectl get po -o wide 
+   33  kubectl exec -it pv-pod -- /bin/bash
+   34  history
+
+
+
+
    
+   
+   
+   
+   Create a pod called pod-multi with 2 containers as it is descripted below:
+   Container 1 : name:container1, image: nginx 
+   Container 2 : name:container2, image: busybox, command: sleep 4800
+   
+   
+   
+   
+   Create a persistent volume with given specifications:
+  Volume Name - pv-rnd
+  storage - 100Mi
+  Access modes - ReadWriteMany
+  host path - /pv/host-data-rnd
+ 
+ 
+ 
+ 
+ Craete a PersistentVolume, PersistentVolumeClaim and Pod with below specifications
+
+  PV - name : mypvl , Size: 100Mi, AccessModes: ReadWritemany, Hostpath: /pv/log, Reclaim Policy: Retain
+  PVC - name:  pv-claim-l, Storage request: 50Mi, Access Modes: ReadWritemany 
+  Pod - name : my-nginx-pod, image Name: nginx, Volume: PersistentVolumeClaim: pv-claim-l, volume mount : /log
+
+
+
+Secrets -----
+ 4  echo -n 'admin' | base64 > username.txt
+    5  echo -n 'password123' | base64 > password.txt
+    6  kubectl get secrets 
+    8  cat username.txt
+    0  cat password.txt
+   11  kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
+   12  kubectl get secrets 
+   13  kubectl describe secrets db-user-pass
+   
+   
+   
+ Config map
+management.endpoints.enabled-by-default=true 
+management.endpoint.info.enabled=true 
+management.security.enabled=false 
+management.endpoints.web.exposure.include=*
+
+
+
+
+
+
+
+server.port= 9000
+server.servlet.context-path=/oracle 
+oracleprops.greeting= Thank you and visit again - altered 
+oracleprops.greeting1= New Data
+
+
+
+
+4  cat > application1.properties
+    5  cat > application2.properties
+    6  kubectl create configmap myconfig-map --from-literal=key1=value1 --from-literal=key2=value2
+    7  kubectl create configmap myconfig-map1 --from-file=./application1.properties --from-file=./application2.properties
+    8  kubectl get cm
